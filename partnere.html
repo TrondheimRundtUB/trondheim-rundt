@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Bedriftene som har tatt plass på brettet i Trondheim Rundt, og feltene som fortsatt er ledige.">
+<title>Våre partnere · Trondheim Rundt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+/* Layout: one long page, board-first hero; sections alternate paper and ink like squares on the board */
+:root{
+  --paper:#F4EEDF; --card:#FBF8F0; --ink:#1B1F2A; --muted:#5B5A55; --line:#1B1F2A;
+  --red:#B8322A; --red-ink:#FFFFFF; --soft:#E9E0CB; --center:#EFE6D0;
+  --g-red:#B8322A; --g-orange:#D9731B; --g-green:#3D6B45; --g-blue:#2E6E96; --g-ochre:#D9A21B; --g-pink:#B5487A; --g-navy:#1F3558;
+  --chance:#F6E3B4; --cardbg:#D8E6EE; --fest:#F3D9D4; --ok:#3D6B45;
+  --display:'Bricolage Grotesque', 'Arial Black', system-ui, sans-serif;
+  --body:'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15181F; --card:#1E222B; --ink:#F1EADB; --muted:#B4AE9F; --line:#3A3F4B;
+  --red:#E0554A; --red-ink:#15181F; --soft:#262A34; --center:#1A1E26; --ok:#7FB487;
+  --chance:#4A3F22; --cardbg:#203645; --fest:#4A2A27; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#15181F; --card:#1E222B; --ink:#F1EADB; --muted:#B4AE9F; --line:#3A3F4B;
+  --red:#E0554A; --red-ink:#15181F; --soft:#262A34; --center:#1A1E26; --ok:#7FB487;
+  --chance:#4A3F22; --cardbg:#203645; --fest:#4A2A27; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);padding-inline:16px}
+.wrap{max-width:1120px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(34px,5vw,56px)}
+h3{font-size:22px;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);border-bottom:2px solid var(--line);margin-inline:-16px;padding:12px 16px}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:var(--red)}
+.nav ul{display:flex;gap:6px 20px;list-style:none;margin:0;padding:0;flex-wrap:wrap;font-weight:600;font-size:15px}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{color:var(--red)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border:2px solid var(--line);border-radius:999px;font:700 16px var(--body);text-decoration:none;cursor:pointer;background:var(--card);color:var(--ink);box-shadow:4px 4px 0 var(--line);transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--line)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn.primary{background:var(--red);color:var(--red-ink);border-color:var(--line)}
+
+section{padding-block:72px}
+.ink{background:var(--ink);color:var(--paper);margin-inline:-16px;padding-inline:16px}
+.ink .eyebrow{color:var(--g-ochre)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,500px);gap:48px;align-items:center;padding-block:56px 72px}
+.hero h1{font-size:clamp(52px,7.2vw,100px);letter-spacing:-.04em;line-height:.88}
+.hero h1 span{color:var(--red);display:block}
+.slogan{font-family:var(--display);font-weight:600;font-style:italic;font-size:clamp(24px,3vw,32px);margin-top:18px}
+.hero .lead{margin-top:18px;max-width:46ch;font-size:18px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;font-size:14px;color:var(--muted)}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* board */
+.board-wrap{container-type:inline-size;width:100%}
+.board{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));grid-template-rows:repeat(9,minmax(0,1fr));aspect-ratio:1;max-width:100%;border:2.5px solid var(--line);background:var(--card);box-shadow:8px 8px 0 var(--line);color:#1B1F2A}
+.cell{hyphens:auto;overflow-wrap:anywhere;border:1px solid #1B1F2A;margin:-.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#FBF8F0;padding:0;font:inherit;color:#1B1F2A;min-width:0}
+.cell span,.cell b{font-size:clamp(6px,1.9cqi,10.5px);line-height:1.1;padding-inline:2px}
+.corner{padding:4px;gap:3px}
+.corner b{font-family:var(--display);font-weight:800;font-size:clamp(6px,2cqi,11px)}
+.c-start{background:#B8322A;color:#fff}
+.c-navy{background:#1F3558;color:#fff}
+.c-plain{background:#E4DAC3}
+.field{cursor:pointer;justify-content:flex-start;position:relative;transition:transform .12s}
+.field:hover{transform:scale(1.06);z-index:2;box-shadow:0 0 0 2px #1B1F2A}
+.field.active{z-index:3;box-shadow:0 0 0 3px var(--red);transform:scale(1.08)}
+.band{display:block;width:100%;height:16%;flex-shrink:0;border-bottom:1px solid #1B1F2A}
+.bus{width:42%;height:auto;margin-top:6%;flex-shrink:0;fill:none;stroke:#1B1F2A;stroke-width:1.7}
+.nm{flex-grow:1;display:flex;align-items:center;font-weight:700}
+.sold{background:#1B1F2A;color:#D9A21B;font-weight:700;letter-spacing:.08em;width:calc(100% - 8px);margin-bottom:4px;border-radius:3px;font-size:clamp(5px,1.5cqi,8.5px)!important}
+.free{flex-grow:1;width:calc(100% - 8px);margin:4px 0;border:1.5px dashed #B8322A;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#B8322A}
+.free b{font-weight:800;letter-spacing:.05em;white-space:nowrap;overflow-wrap:normal;hyphens:none}
+.free span{color:#1B1F2A}
+.special{gap:2px;padding:3px}
+.special svg{width:36%;height:auto;fill:none;stroke-width:1.8}
+.s-chance{background:#F6E3B4}
+.s-chance .q{font-family:var(--display);font-size:clamp(14px,5cqi,30px);color:#B8322A}
+.s-card{background:#D8E6EE}.s-card svg{stroke:#2E6E96}
+.s-fest{background:#F3D9D4}.s-fest svg{stroke:#B8322A}.s-fest b{color:#B8322A;font-family:var(--display)}
+.s-tax b{font-weight:800}
+.g-red{background:#B8322A}.g-orange{background:#D9731B}.g-green{background:#3D6B45}.g-blue{background:#2E6E96}.g-ochre{background:#D9A21B}.g-pink{background:#B5487A}.g-navy{background:#1F3558}
+.center{grid-row:2/span 7;grid-column:2/span 7;background:#EFE6D0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;padding:5%;position:relative}
+.stamp{transform:rotate(-12deg);display:flex;flex-direction:column;align-items:center;gap:6px}
+.stamp b{background:#B8322A;color:#fff;border:2px solid #1B1F2A;padding:4px 14px;font-family:var(--display);font-weight:800;font-size:clamp(18px,7cqi,44px);line-height:1;letter-spacing:-.02em}
+.stamp span{font-family:var(--display);font-weight:800;font-size:clamp(14px,5.5cqi,34px);letter-spacing:.3em;line-height:1}
+.info{background:#FBF8F0;border:1.5px solid #1B1F2A;border-radius:10px;padding:10px 12px;width:min(100%,300px);font-size:clamp(11px,2.6cqi,14px);line-height:1.35;min-height:5.2em;text-align:left;margin-top:6%}
+.info .k{font-size:.78em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5B5A55}
+.info strong{display:block;font-family:var(--display);font-size:1.25em}
+.info a{color:#B8322A;font-weight:700}
+@container (max-width: 420px){
+  .cell .nm,.cell .free span,.special span,.special b:not(.q),.corner span{display:none}
+  .free{border-width:1px}
+  .free b{font-size:6px}
+}
+
+/* how it works */
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start}
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rule{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.rule .tag{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1.5px solid var(--line)}
+.rule p{color:var(--muted);font-size:16px}
+.intro{display:flex;flex-direction:column;gap:18px}
+.intro p{font-size:18px;max-width:42ch}
+
+/* businesses */
+.biz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.biz .intro p{color:var(--paper);opacity:.85}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:8px}
+.stat{border-top:2px solid var(--paper);padding-top:10px}
+.stat b{display:block;font-family:var(--display);font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;opacity:.85}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price b{font-family:var(--display);font-size:56px;font-weight:800;line-height:1}
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cats span{display:inline-flex;align-items:center;gap:6px;font-size:14px;border:1.5px solid var(--paper);border-radius:999px;padding:4px 12px 4px 6px}
+.cats i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid var(--paper)}
+.src{font-size:13px;opacity:.7}
+
+/* forms */
+form{background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:6px 6px 0 var(--line)}
+.ink form{border-color:var(--paper);box-shadow:6px 6px 0 var(--red)}
+form h3{margin-bottom:2px}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;min-width:0}
+input,select,textarea{font:400 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;min-height:46px;width:100%}
+textarea{min-height:90px;resize:vertical}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.done{border:2px solid var(--ok);border-radius:12px;padding:14px 16px;font-size:16px;display:flex;flex-direction:column;gap:4px}
+.done b{color:var(--ok)}
+.err{color:var(--red);font-size:14px;font-weight:600}
+
+/* buy */
+.buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.box{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.boxart{width:180px;aspect-ratio:1;max-width:100%;background:#B8322A;border:2.5px solid var(--line);box-shadow:8px 8px 0 var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-4deg);color:#fff;text-align:center;gap:4px}
+.boxart b{font-family:var(--display);font-size:23px;line-height:.95}
+.boxart span{font-size:12px;letter-spacing:.2em;font-weight:700}
+.where{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px}
+.where li{display:flex;gap:12px;align-items:baseline;border-bottom:1.5px solid var(--line);padding-bottom:10px}
+.where li b{min-width:9em}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:46px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:700 20px var(--body);cursor:pointer}
+.qty input{width:70px;text-align:center}
+.sum{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:780px}
+details{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:0 18px}
+summary{cursor:pointer;font-weight:700;padding:16px 0;list-style-position:outside}
+details p{padding-bottom:16px;color:var(--muted);max-width:65ch}
+
+
+.navbtn{background:var(--red);color:var(--red-ink)!important;padding:6px 14px;border-radius:999px;border:2px solid var(--line)}
+.navbtn:hover{filter:brightness(1.08)}
+.navbtn[aria-current="page"]{box-shadow:3px 3px 0 var(--line)}
+.back{font-weight:700;text-decoration:none;color:var(--red);align-self:flex-start}
+.ph1{font-size:clamp(40px,6vw,76px);max-width:16ch}
+.lead2{font-size:18px;max-width:56ch}
+.partners-head{padding-block:56px 24px}
+.partners-list{padding-block:24px 72px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:14px}
+.pcard{background:var(--card);border:2px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pcard .pband{height:14px;border-bottom:2px solid var(--line)}
+.pbody{padding:20px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
+.pmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ptop{display:flex;align-items:center;gap:14px}
+.mono{width:52px;height:52px;flex-shrink:0;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:20px;color:#fff}
+.pcard h3{font-size:24px}
+.pwhere{font-size:14px;color:var(--muted)}
+.pcard p.desc{font-size:16px;flex-grow:1}
+.pcard .seefelt{align-self:flex-start;font-weight:700;color:var(--red);text-decoration:none;border-bottom:2px solid currentColor}
+.slot{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border:2px dashed var(--red);border-radius:14px;text-decoration:none;color:var(--ink);background:var(--card);position:relative;transition:transform .12s}
+.slot:hover{transform:translateY(-2px)}
+.slot i{position:absolute;top:16px;right:16px;width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.slot .sk{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.slot b{font-family:var(--display);font-size:22px}
+.slot .sl{font-size:14px;font-weight:700;color:var(--red)}
+.navbtn.alt{background:var(--card);color:var(--ink)!important}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),200px));gap:16px}
+.tcard{background:var(--card);border:2px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:4px 4px 0 var(--line)}
+.photo{aspect-ratio:1;max-width:100%;background:var(--soft);border-bottom:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted)}
+.photo svg{width:40%;height:auto;fill:none;stroke:var(--muted);stroke-width:3}
+.photo span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.trole{align-self:flex-start;max-width:100%;font-size:12px;font-weight:700;background:var(--red);color:var(--red-ink);padding:4px 9px;border-radius:6px;line-height:1.3;overflow-wrap:anywhere;hyphens:auto}
+.tcard h3{font-size:17px;line-height:1.1;overflow-wrap:break-word}
+.tcard p{font-size:16px;color:var(--muted)}
+.money{display:flex;flex-direction:column;gap:12px;border-top:2px solid var(--line);padding-top:16px}
+.money div{display:flex;flex-direction:column}
+.money b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.money span{font-size:15px;color:var(--muted)}
+.rule.build{grid-column:1/-1}
+.tablewrap{overflow-x:auto}
+.pieces{display:flex;gap:28px;flex-wrap:wrap;margin-block:4px 6px}
+.pieces figure{margin:0;display:flex;align-items:center;gap:12px}
+.pieces svg{width:56px;height:56px;fill:var(--soft);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.pieces figcaption{display:flex;flex-direction:column;font-size:14px;color:var(--muted)}
+.pieces figcaption b{color:var(--ink);font-size:16px}
+.build table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.build th,.build td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.build th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.build .n{text-align:right;white-space:nowrap}
+.build td:first-child{white-space:nowrap}
+.build td i{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid var(--line);margin-right:8px;vertical-align:-1px}
+.pcta{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.pcta p{font-size:18px;max-width:52ch;opacity:.9}
+footer{border-top:2px solid var(--line);padding-block:28px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+footer .logo{font-size:18px;color:var(--ink)}
+
+@media (max-width: 880px){
+  .hero,.split,.biz,.buy{grid-template-columns:minmax(0,1fr)}
+  .hero{gap:36px}
+}
+@media (max-width: 560px){
+  .rules,.row{grid-template-columns:minmax(0,1fr)}
+  section{padding-block:52px}
+  .nav ul{font-size:14px;gap:4px 14px}
+  .stats{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="./">Trondheim <span>Rundt</span></a>
+    <nav aria-label="Hovedmeny">
+      <ul>
+        <li><a href="./#spillet">Spillet</a></li>
+        <li><a href="./#bedrifter">For bedrifter</a></li>
+        <li><a href="./#kjop">Kjøp</a></li>
+        <li><a href="./#faq">Spørsmål</a></li>
+        <li><a class="navbtn" href="partnere" aria-current="page">Våre partnere</a></li>
+        <li><a class="navbtn alt" href="mot-oss">Møt oss</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main><section class="partners-head">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:16px">
+    <a class="back" href="./">← Tilbake til forsiden</a>
+    <p class="eyebrow">Våre partnere</p>
+    <h1 class="ph1">Her kommer bedriftene på brettet.</h1>
+    <p class="lead2">Vi har ingen partnere ennå. Alle 20 bedriftsfeltene er ledige, og de første som blir med får velge felt først. Når en bedrift har kjøpt plass, dukker den opp her med navn og litt om hva de driver med.</p>
+  </div>
+</section>
+<section class="partners-list">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:18px">
+    <h3>Ledige felt</h3>
+    <div class="pgrid">
+<a class="slot" href="./?felt=felt-1#bedrifter"><i style="background:#B8322A"></i><span class="sk">Felt 1</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-3#bedrifter"><i style="background:#B8322A"></i><span class="sk">Felt 2</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-5#bedrifter"><i style="background:#5B5A55"></i><span class="sk">Felt 3</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-6#bedrifter"><i style="background:#D9731B"></i><span class="sk">Felt 4</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-7#bedrifter"><i style="background:#D9731B"></i><span class="sk">Felt 5</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-9#bedrifter"><i style="background:#3D6B45"></i><span class="sk">Felt 6</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-11#bedrifter"><i style="background:#3D6B45"></i><span class="sk">Felt 7</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-12#bedrifter"><i style="background:#3D6B45"></i><span class="sk">Felt 8</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-13#bedrifter"><i style="background:#5B5A55"></i><span class="sk">Felt 9</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-14#bedrifter"><i style="background:#2E6E96"></i><span class="sk">Felt 10</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-17#bedrifter"><i style="background:#2E6E96"></i><span class="sk">Felt 11</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-18#bedrifter"><i style="background:#D9A21B"></i><span class="sk">Felt 12</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-20#bedrifter"><i style="background:#D9A21B"></i><span class="sk">Felt 13</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-21#bedrifter"><i style="background:#5B5A55"></i><span class="sk">Felt 14</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-22#bedrifter"><i style="background:#D9A21B"></i><span class="sk">Felt 15</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-25#bedrifter"><i style="background:#B5487A"></i><span class="sk">Felt 16</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-26#bedrifter"><i style="background:#5B5A55"></i><span class="sk">Felt 17</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-28#bedrifter"><i style="background:#B5487A"></i><span class="sk">Felt 18</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-29#bedrifter"><i style="background:#1F3558"></i><span class="sk">Felt 19</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+<a class="slot" href="./?felt=felt-31#bedrifter"><i style="background:#1F3558"></i><span class="sk">Felt 20</span><b>Din bedrift her</b><span class="sl">Ledig</span></a>
+    </div>
+  </div>
+</section>
+<section class="ink">
+  <div class="wrap pcta">
+    <h2>Bli vår første partner.</h2>
+    <p>Ett felt koster 5 000 kr, og du betaler først når feltet er avtalt.</p>
+    <a class="btn primary" href="./#bedrifter">Meld interesse</a>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">
+  <span class="logo">Trondheim <span style="color:var(--red)">Rundt</span></span>
+  <span>Laget i Trondheim. Dette er en prototype, og skjemaene sender ingenting ennå.</span>
+</footer>
+
+</body>
+</html>

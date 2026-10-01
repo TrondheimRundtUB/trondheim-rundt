@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Trondheim Rundt er brettspillet om byen vår. Lokale bedrifter kjøper plass på brettet, og du spiller deg rundt Trondheim.">
+<title>Trondheim Rundt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+/* Layout: one long page, board-first hero; sections alternate paper and ink like squares on the board */
+:root{
+  --paper:#F4EEDF; --card:#FBF8F0; --ink:#1B1F2A; --muted:#5B5A55; --line:#1B1F2A;
+  --red:#B8322A; --red-ink:#FFFFFF; --soft:#E9E0CB; --center:#EFE6D0;
+  --g-red:#B8322A; --g-orange:#D9731B; --g-green:#3D6B45; --g-blue:#2E6E96; --g-ochre:#D9A21B; --g-pink:#B5487A; --g-navy:#1F3558;
+  --chance:#F6E3B4; --cardbg:#D8E6EE; --fest:#F3D9D4; --ok:#3D6B45;
+  --display:'Bricolage Grotesque', 'Arial Black', system-ui, sans-serif;
+  --body:'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15181F; --card:#1E222B; --ink:#F1EADB; --muted:#B4AE9F; --line:#3A3F4B;
+  --red:#E0554A; --red-ink:#15181F; --soft:#262A34; --center:#1A1E26; --ok:#7FB487;
+  --chance:#4A3F22; --cardbg:#203645; --fest:#4A2A27; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#15181F; --card:#1E222B; --ink:#F1EADB; --muted:#B4AE9F; --line:#3A3F4B;
+  --red:#E0554A; --red-ink:#15181F; --soft:#262A34; --center:#1A1E26; --ok:#7FB487;
+  --chance:#4A3F22; --cardbg:#203645; --fest:#4A2A27; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);padding-inline:16px}
+.wrap{max-width:1120px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(34px,5vw,56px)}
+h3{font-size:22px;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);border-bottom:2px solid var(--line);margin-inline:-16px;padding:12px 16px}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;text-decoration:none;letter-spacing:-.02em}
+.logo span{color:var(--red)}
+.nav ul{display:flex;gap:6px 20px;list-style:none;margin:0;padding:0;flex-wrap:wrap;font-weight:600;font-size:15px}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{color:var(--red)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border:2px solid var(--line);border-radius:999px;font:700 16px var(--body);text-decoration:none;cursor:pointer;background:var(--card);color:var(--ink);box-shadow:4px 4px 0 var(--line);transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--line)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn.primary{background:var(--red);color:var(--red-ink);border-color:var(--line)}
+
+section{padding-block:72px}
+.ink{background:var(--ink);color:var(--paper);margin-inline:-16px;padding-inline:16px}
+.ink .eyebrow{color:var(--g-ochre)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,500px);gap:48px;align-items:center;padding-block:56px 72px}
+.hero h1{font-size:clamp(52px,7.2vw,100px);letter-spacing:-.04em;line-height:.88}
+.hero h1 span{color:var(--red);display:block}
+.slogan{font-family:var(--display);font-weight:600;font-style:italic;font-size:clamp(24px,3vw,32px);margin-top:18px}
+.hero .lead{margin-top:18px;max-width:46ch;font-size:18px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;font-size:14px;color:var(--muted)}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* board */
+.board-wrap{container-type:inline-size;width:100%}
+.board{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));grid-template-rows:repeat(9,minmax(0,1fr));aspect-ratio:1;max-width:100%;border:2.5px solid var(--line);background:var(--card);box-shadow:8px 8px 0 var(--line);color:#1B1F2A}
+.cell{hyphens:auto;overflow-wrap:anywhere;border:1px solid #1B1F2A;margin:-.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#FBF8F0;padding:0;font:inherit;color:#1B1F2A;min-width:0}
+.cell span,.cell b{font-size:clamp(6px,1.9cqi,10.5px);line-height:1.1;padding-inline:2px}
+.corner{padding:4px;gap:3px}
+.corner b{font-family:var(--display);font-weight:800;font-size:clamp(6px,2cqi,11px)}
+.c-start{background:#B8322A;color:#fff}
+.c-navy{background:#1F3558;color:#fff}
+.c-plain{background:#E4DAC3}
+.field{cursor:pointer;justify-content:flex-start;position:relative;transition:transform .12s}
+.field:hover{transform:scale(1.06);z-index:2;box-shadow:0 0 0 2px #1B1F2A}
+.field.active{z-index:3;box-shadow:0 0 0 3px var(--red);transform:scale(1.08)}
+.band{display:block;width:100%;height:16%;flex-shrink:0;border-bottom:1px solid #1B1F2A}
+.bus{width:42%;height:auto;margin-top:6%;flex-shrink:0;fill:none;stroke:#1B1F2A;stroke-width:1.7}
+.nm{flex-grow:1;display:flex;align-items:center;font-weight:700}
+.sold{background:#1B1F2A;color:#D9A21B;font-weight:700;letter-spacing:.08em;width:calc(100% - 8px);margin-bottom:4px;border-radius:3px;font-size:clamp(5px,1.5cqi,8.5px)!important}
+.free{flex-grow:1;width:calc(100% - 8px);margin:4px 0;border:1.5px dashed #B8322A;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#B8322A}
+.free b{font-weight:800;letter-spacing:.05em;white-space:nowrap;overflow-wrap:normal;hyphens:none}
+.free span{color:#1B1F2A}
+.special{gap:2px;padding:3px}
+.special svg{width:36%;height:auto;fill:none;stroke-width:1.8}
+.s-chance{background:#F6E3B4}
+.s-chance .q{font-family:var(--display);font-size:clamp(14px,5cqi,30px);color:#B8322A}
+.s-card{background:#D8E6EE}.s-card svg{stroke:#2E6E96}
+.s-fest{background:#F3D9D4}.s-fest svg{stroke:#B8322A}.s-fest b{color:#B8322A;font-family:var(--display)}
+.s-tax b{font-weight:800}
+.g-red{background:#B8322A}.g-orange{background:#D9731B}.g-green{background:#3D6B45}.g-blue{background:#2E6E96}.g-ochre{background:#D9A21B}.g-pink{background:#B5487A}.g-navy{background:#1F3558}
+.center{grid-row:2/span 7;grid-column:2/span 7;background:#EFE6D0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;padding:5%;position:relative}
+.stamp{transform:rotate(-12deg);display:flex;flex-direction:column;align-items:center;gap:6px}
+.stamp b{background:#B8322A;color:#fff;border:2px solid #1B1F2A;padding:4px 14px;font-family:var(--display);font-weight:800;font-size:clamp(18px,7cqi,44px);line-height:1;letter-spacing:-.02em}
+.stamp span{font-family:var(--display);font-weight:800;font-size:clamp(14px,5.5cqi,34px);letter-spacing:.3em;line-height:1}
+.info{background:#FBF8F0;border:1.5px solid #1B1F2A;border-radius:10px;padding:10px 12px;width:min(100%,300px);font-size:clamp(11px,2.6cqi,14px);line-height:1.35;min-height:5.2em;text-align:left;margin-top:6%}
+.info .k{font-size:.78em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5B5A55}
+.info strong{display:block;font-family:var(--display);font-size:1.25em}
+.info a{color:#B8322A;font-weight:700}
+@container (max-width: 420px){
+  .cell .nm,.cell .free span,.special span,.special b:not(.q),.corner span{display:none}
+  .free{border-width:1px}
+  .free b{font-size:6px}
+}
+
+/* how it works */
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start}
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rule{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.rule .tag{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1.5px solid var(--line)}
+.rule p{color:var(--muted);font-size:16px}
+.intro{display:flex;flex-direction:column;gap:18px}
+.intro p{font-size:18px;max-width:42ch}
+
+/* businesses */
+.biz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.biz .intro p{color:var(--paper);opacity:.85}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:8px}
+.stat{border-top:2px solid var(--paper);padding-top:10px}
+.stat b{display:block;font-family:var(--display);font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;opacity:.85}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price b{font-family:var(--display);font-size:56px;font-weight:800;line-height:1}
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cats span{display:inline-flex;align-items:center;gap:6px;font-size:14px;border:1.5px solid var(--paper);border-radius:999px;padding:4px 12px 4px 6px}
+.cats i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid var(--paper)}
+.src{font-size:13px;opacity:.7}
+
+/* forms */
+form{background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:6px 6px 0 var(--line)}
+.ink form{border-color:var(--paper);box-shadow:6px 6px 0 var(--red)}
+form h3{margin-bottom:2px}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;min-width:0}
+input,select,textarea{font:400 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;min-height:46px;width:100%}
+textarea{min-height:90px;resize:vertical}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.done{border:2px solid var(--ok);border-radius:12px;padding:14px 16px;font-size:16px;display:flex;flex-direction:column;gap:4px}
+.done b{color:var(--ok)}
+.err{color:var(--red);font-size:14px;font-weight:600}
+
+/* buy */
+.buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.box{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.boxart{width:180px;aspect-ratio:1;max-width:100%;background:#B8322A;border:2.5px solid var(--line);box-shadow:8px 8px 0 var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-4deg);color:#fff;text-align:center;gap:4px}
+.boxart b{font-family:var(--display);font-size:23px;line-height:.95}
+.boxart span{font-size:12px;letter-spacing:.2em;font-weight:700}
+.where{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px}
+.where li{display:flex;gap:12px;align-items:baseline;border-bottom:1.5px solid var(--line);padding-bottom:10px}
+.where li b{min-width:9em}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:46px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:700 20px var(--body);cursor:pointer}
+.qty input{width:70px;text-align:center}
+.sum{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:780px}
+details{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:0 18px}
+summary{cursor:pointer;font-weight:700;padding:16px 0;list-style-position:outside}
+details p{padding-bottom:16px;color:var(--muted);max-width:65ch}
+
+
+.navbtn{background:var(--red);color:var(--red-ink)!important;padding:6px 14px;border-radius:999px;border:2px solid var(--line)}
+.navbtn:hover{filter:brightness(1.08)}
+.navbtn[aria-current="page"]{box-shadow:3px 3px 0 var(--line)}
+.back{font-weight:700;text-decoration:none;color:var(--red);align-self:flex-start}
+.ph1{font-size:clamp(40px,6vw,76px);max-width:16ch}
+.lead2{font-size:18px;max-width:56ch}
+.partners-head{padding-block:56px 24px}
+.partners-list{padding-block:24px 72px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:14px}
+.pcard{background:var(--card);border:2px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pcard .pband{height:14px;border-bottom:2px solid var(--line)}
+.pbody{padding:20px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
+.pmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ptop{display:flex;align-items:center;gap:14px}
+.mono{width:52px;height:52px;flex-shrink:0;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:20px;color:#fff}
+.pcard h3{font-size:24px}
+.pwhere{font-size:14px;color:var(--muted)}
+.pcard p.desc{font-size:16px;flex-grow:1}
+.pcard .seefelt{align-self:flex-start;font-weight:700;color:var(--red);text-decoration:none;border-bottom:2px solid currentColor}
+.slot{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border:2px dashed var(--red);border-radius:14px;text-decoration:none;color:var(--ink);background:var(--card);position:relative;transition:transform .12s}
+.slot:hover{transform:translateY(-2px)}
+.slot i{position:absolute;top:16px;right:16px;width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.slot .sk{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.slot b{font-family:var(--display);font-size:22px}
+.slot .sl{font-size:14px;font-weight:700;color:var(--red)}
+.navbtn.alt{background:var(--card);color:var(--ink)!important}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),200px));gap:16px}
+.tcard{background:var(--card);border:2px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:4px 4px 0 var(--line)}
+.photo{aspect-ratio:1;max-width:100%;background:var(--soft);border-bottom:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted)}
+.photo svg{width:40%;height:auto;fill:none;stroke:var(--muted);stroke-width:3}
+.photo span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.trole{align-self:flex-start;max-width:100%;font-size:12px;font-weight:700;background:var(--red);color:var(--red-ink);padding:4px 9px;border-radius:6px;line-height:1.3;overflow-wrap:anywhere;hyphens:auto}
+.tcard h3{font-size:17px;line-height:1.1;overflow-wrap:break-word}
+.tcard p{font-size:16px;color:var(--muted)}
+.money{display:flex;flex-direction:column;gap:12px;border-top:2px solid var(--line);padding-top:16px}
+.money div{display:flex;flex-direction:column}
+.money b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.money span{font-size:15px;color:var(--muted)}
+.rule.build{grid-column:1/-1}
+.tablewrap{overflow-x:auto}
+.pieces{display:flex;gap:28px;flex-wrap:wrap;margin-block:4px 6px}
+.pieces figure{margin:0;display:flex;align-items:center;gap:12px}
+.pieces svg{width:56px;height:56px;fill:var(--soft);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.pieces figcaption{display:flex;flex-direction:column;font-size:14px;color:var(--muted)}
+.pieces figcaption b{color:var(--ink);font-size:16px}
+.build table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.build th,.build td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.build th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.build .n{text-align:right;white-space:nowrap}
+.build td:first-child{white-space:nowrap}
+.build td i{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid var(--line);margin-right:8px;vertical-align:-1px}
+.pcta{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.pcta p{font-size:18px;max-width:52ch;opacity:.9}
+footer{border-top:2px solid var(--line);padding-block:28px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+footer .logo{font-size:18px;color:var(--ink)}
+
+@media (max-width: 880px){
+  .hero,.split,.biz,.buy{grid-template-columns:minmax(0,1fr)}
+  .hero{gap:36px}
+}
+@media (max-width: 560px){
+  .rules,.row{grid-template-columns:minmax(0,1fr)}
+  section{padding-block:52px}
+  .nav ul{font-size:14px;gap:4px 14px}
+  .stats{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="./">Trondheim <span>Rundt</span></a>
+    <nav aria-label="Hovedmeny">
+      <ul>
+        <li><a href="./#spillet">Spillet</a></li>
+        <li><a href="./#bedrifter">For bedrifter</a></li>
+        <li><a href="./#kjop">Kjøp</a></li>
+        <li><a href="./#faq">Spørsmål</a></li>
+        <li><a class="navbtn" href="partnere">Våre partnere</a></li>
+        <li><a class="navbtn alt" href="mot-oss">Møt oss</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="top">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Brettspillet om byen vår</p>
+      <h1>Trondheim <span>Rundt</span></h1>
+      <p class="slogan">«Hele byen, rundt ett bord.»</p>
+      <p class="lead">Monopol, bare med Trondheim. Lokale bedrifter kjøper sin egen plass på brettet, og du spiller deg rundt byen du kjenner. Kjøp kafeen på hjørnet, havne i kø på Elgeseter og håp på Olavsfest.</p>
+      <div class="cta">
+        <a class="btn primary" href="#kjop">Forhåndsbestill spillet</a>
+        <a class="btn" href="#bedrifter">Få bedriften på brettet</a>
+      </div>
+      <p class="facts"><span><b>20</b> bedriftsfelt på brettet</span><span><b>Alle</b> er ledige nå</span><span><b>399 kr</b> for spillet</span></p>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" lang="nb" role="group" aria-label="Prototype av spillbrettet. Trykk på et felt for å se hvem som eier det.">
+<div class="cell corner c-start" style="grid-row:9;grid-column:9"><b>START</b><span>Få 20 000 kr</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:9;grid-column:8" id="felt-1" data-cat="Felt 1" data-col="red" data-price="6 000 kr" data-rent="200 kr" data-name="" data-status="ledig" aria-label="Felt 1, ledig"><i class="band g-red"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-chance" style="grid-row:9;grid-column:7"><b class="q">?</b><span>Trønder&shy;sjanse</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:9;grid-column:6" id="felt-3" data-cat="Felt 2" data-col="red" data-price="6 000 kr" data-rent="400 kr" data-name="" data-status="ledig" aria-label="Felt 2, ledig"><i class="band g-red"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-tax" style="grid-row:9;grid-column:5"><b>Bompenger</b><span>Betal 20 000 kr</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:9;grid-column:4" id="felt-5" data-cat="Felt 3" data-col="trans" data-price="20 000 kr" data-rent="2 500 kr, dobles for hvert transportfelt du eier" data-name="" data-status="ledig" aria-label="Felt 3, ledig"><svg class="bus" viewBox="0 0 26 18" aria-hidden="true"><rect x="3" y="1" width="20" height="12" rx="3"></rect><line x1="3" y1="8" x2="23" y2="8"></line><circle cx="8" cy="15.5" r="1.6"></circle><circle cx="18" cy="15.5" r="1.6"></circle></svg><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:9;grid-column:3" id="felt-6" data-cat="Felt 4" data-col="orange" data-price="10 000 kr" data-rent="600 kr" data-name="" data-status="ledig" aria-label="Felt 4, ledig"><i class="band g-orange"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:9;grid-column:2" id="felt-7" data-cat="Felt 5" data-col="orange" data-price="12 000 kr" data-rent="800 kr" data-name="" data-status="ledig" aria-label="Felt 5, ledig"><i class="band g-orange"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell corner c-plain" style="grid-row:9;grid-column:1"><b>KØ PÅ ELGE&shy;SETER</b><span>Stå over én runde</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:8;grid-column:1" id="felt-9" data-cat="Felt 6" data-col="green" data-price="14 000 kr" data-rent="1 000 kr" data-name="" data-status="ledig" aria-label="Felt 6, ledig"><i class="band g-green"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-card" style="grid-row:7;grid-column:1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg><span>Bylivkort</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:6;grid-column:1" id="felt-11" data-cat="Felt 7" data-col="green" data-price="14 000 kr" data-rent="1 000 kr" data-name="" data-status="ledig" aria-label="Felt 7, ledig"><i class="band g-green"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:5;grid-column:1" id="felt-12" data-cat="Felt 8" data-col="green" data-price="16 000 kr" data-rent="1 200 kr" data-name="" data-status="ledig" aria-label="Felt 8, ledig"><i class="band g-green"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:4;grid-column:1" id="felt-13" data-cat="Felt 9" data-col="trans" data-price="20 000 kr" data-rent="2 500 kr, dobles for hvert transportfelt du eier" data-name="" data-status="ledig" aria-label="Felt 9, ledig"><svg class="bus" viewBox="0 0 26 18" aria-hidden="true"><rect x="3" y="1" width="20" height="12" rx="3"></rect><line x1="3" y1="8" x2="23" y2="8"></line><circle cx="8" cy="15.5" r="1.6"></circle><circle cx="18" cy="15.5" r="1.6"></circle></svg><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:3;grid-column:1" id="felt-14" data-cat="Felt 10" data-col="blue" data-price="18 000 kr" data-rent="1 400 kr" data-name="" data-status="ledig" aria-label="Felt 10, ledig"><i class="band g-blue"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-chance" style="grid-row:2;grid-column:1"><b class="q">?</b><span>Trønder&shy;sjanse</span></div>
+<div class="cell corner c-plain" style="grid-row:1;grid-column:1"><b>GRATIS PAR&shy;KERING</b><span>på Torvet (ja, virkelig)</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:1;grid-column:2" id="felt-17" data-cat="Felt 11" data-col="blue" data-price="20 000 kr" data-rent="1 600 kr" data-name="" data-status="ledig" aria-label="Felt 11, ledig"><i class="band g-blue"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:1;grid-column:3" id="felt-18" data-cat="Felt 12" data-col="ochre" data-price="22 000 kr" data-rent="1 800 kr" data-name="" data-status="ledig" aria-label="Felt 12, ledig"><i class="band g-ochre"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-card" style="grid-row:1;grid-column:4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg><span>Bylivkort</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:1;grid-column:5" id="felt-20" data-cat="Felt 13" data-col="ochre" data-price="22 000 kr" data-rent="1 800 kr" data-name="" data-status="ledig" aria-label="Felt 13, ledig"><i class="band g-ochre"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:1;grid-column:6" id="felt-21" data-cat="Felt 14" data-col="trans" data-price="20 000 kr" data-rent="2 500 kr, dobles for hvert transportfelt du eier" data-name="" data-status="ledig" aria-label="Felt 14, ledig"><svg class="bus" viewBox="0 0 26 18" aria-hidden="true"><rect x="3" y="1" width="20" height="12" rx="3"></rect><line x1="3" y1="8" x2="23" y2="8"></line><circle cx="8" cy="15.5" r="1.6"></circle><circle cx="18" cy="15.5" r="1.6"></circle></svg><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:1;grid-column:7" id="felt-22" data-cat="Felt 15" data-col="ochre" data-price="24 000 kr" data-rent="2 000 kr" data-name="" data-status="ledig" aria-label="Felt 15, ledig"><i class="band g-ochre"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-tax" style="grid-row:1;grid-column:8"><b>Parkerings&shy;bøter</b><span>Betal 10 000 kr</span></div>
+<div class="cell corner c-navy" style="grid-row:1;grid-column:9"><b>RETT I KØ!</b><span>Gå til Elgeseter bro</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:2;grid-column:9" id="felt-25" data-cat="Felt 16" data-col="pink" data-price="26 000 kr" data-rent="2 200 kr" data-name="" data-status="ledig" aria-label="Felt 16, ledig"><i class="band g-pink"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:3;grid-column:9" id="felt-26" data-cat="Felt 17" data-col="trans" data-price="20 000 kr" data-rent="2 500 kr, dobles for hvert transportfelt du eier" data-name="" data-status="ledig" aria-label="Felt 17, ledig"><svg class="bus" viewBox="0 0 26 18" aria-hidden="true"><rect x="3" y="1" width="20" height="12" rx="3"></rect><line x1="3" y1="8" x2="23" y2="8"></line><circle cx="8" cy="15.5" r="1.6"></circle><circle cx="18" cy="15.5" r="1.6"></circle></svg><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-chance" style="grid-row:4;grid-column:9"><b class="q">?</b><span>Trønder&shy;sjanse</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:5;grid-column:9" id="felt-28" data-cat="Felt 18" data-col="pink" data-price="28 000 kr" data-rent="2 400 kr" data-name="" data-status="ledig" aria-label="Felt 18, ledig"><i class="band g-pink"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<button type="button" class="cell field free-cell" style="grid-row:6;grid-column:9" id="felt-29" data-cat="Felt 19" data-col="navy" data-price="35 000 kr" data-rent="3 500 kr" data-name="" data-status="ledig" aria-label="Felt 19, ledig"><i class="band g-navy"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+<div class="cell special s-fest" style="grid-row:7;grid-column:9"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"></path><path d="M5 4h12l-3 4 3 4H5"></path></svg><b>OLAVSFEST!</b><span>+5 000 kr fra alle</span></div>
+<button type="button" class="cell field free-cell" style="grid-row:8;grid-column:9" id="felt-31" data-cat="Felt 20" data-col="navy" data-price="40 000 kr" data-rent="5 000 kr" data-name="" data-status="ledig" aria-label="Felt 20, ledig"><i class="band g-navy"></i><span class="free"><b>LEDIG</b><span>din bedrift her</span></span></button>
+        <div class="center">
+          <div class="stamp" aria-hidden="true"><b>TRONDHEIM</b><span>RUNDT</span></div>
+          <div class="info" id="info" aria-live="polite">
+            <span class="k">Prototype</span>
+            <strong>Trykk på et felt</strong>
+            Alle feltene er ledige. Se hvilken bransje hvert felt er for.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section id="spillet">
+  <div class="wrap split">
+    <div class="intro">
+      <p class="eyebrow">Spillet</p>
+      <h2>Kjenner du byen, har du et forsprang.</h2>
+      <p>Reglene er de du kan fra før: kast terningen, kjøp felt, ta leie. Forskjellen er at feltene er ekte steder å spise, trene og handle i Trondheim.</p>
+      <div class="money">
+        <div><b>150 000 kr</b><span>har alle i startkapital</span></div>
+        <div><b>20 000 kr</b><span>får du når du passerer Start</span></div>
+        <div><b>6 000 til 40 000 kr</b><span>koster bedriftene, fra de billigste til premiumfeltene</span></div>
+      </div>
+    </div>
+    <div class="rules">
+      <div class="rule"><span class="tag" style="background:var(--soft)">Bedriftsfelt</span><h3>Kjøp bedriftene</h3><p>Hvert felt er en lokal bedrift. Eier du alle i én farge, dobles leia.</p></div>
+      <div class="rule"><span class="tag" style="background:var(--chance);color:#1B1F2A">Trøndersjanse</span><h3>Lokale overraskelser</h3><p>Rosenborg vant, motta 10 000 kr. Strømregningen kom, betal 15 000 kr.</p></div>
+      <div class="rule"><span class="tag" style="background:var(--cardbg)">Transport</span><h3>Kom deg rundt</h3><p>Taxi, buss og båt. Hvert felt koster 20 000 kr. Leia er 2 500 kr og dobles for hvert transportfelt du eier.</p></div>
+      <div class="rule"><span class="tag" style="background:var(--fest)">Spesialfelt</span><h3>Kø og fest</h3><p>Havner du i kø på Elgeseter, står du over. Lander du på Olavsfest, betaler alle deg 5 000 kr.</p></div>
+      <div class="rule build">
+        <span class="tag" style="background:var(--soft)">Kontor og hovedkontor</span>
+        <h3>Bygg ut bedriften</h3>
+        <p>Eier du alle bedriftene i én farge, kan du bygge kontorer. Hvert kontor øker leia. Har du fire kontorer på et felt, kan du bygge et hovedkontor. Da gir du fra deg de fire kontorene og betaler det samme som for ett kontor til. Hovedkontoret gir den høyeste leia på brettet. Alle priser står i regelarket.</p>
+        <div class="pieces">
+          <figure><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 L32 12 L52 30 V54 H12 Z"></path><rect x="27" y="38" width="10" height="16"></rect></svg><figcaption><b>Kontor</b>Et lite hus</figcaption></figure>
+          <figure><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="20" y="4" width="24" height="56"></rect><path d="M25 10h4M35 10h4M25 18h4M35 18h4M25 26h4M35 26h4M25 34h4M35 34h4M25 42h4M35 42h4"></path><rect x="29" y="50" width="6" height="10"></rect></svg><figcaption><b>Hovedkontor</b>En skyskraper med vinduer</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bedrifter" class="ink">
+  <div class="wrap biz">
+    <div class="intro">
+      <p class="eyebrow">For bedrifter</p>
+      <h2>Reklame som ligger på stuebordet i årevis.</h2>
+      <p>En annonse i feeden er borte på tre sekunder. Et felt på Trondheim Rundt blir sett hver gang noen spiller, og folk husker hvem som eide feltet de tapte alt sitt på.</p>
+      <div class="stats">
+        <div class="stat"><b>218 787</b><span>innbyggere i Trondheim</span></div>
+        <div class="stat"><b>23 557</b><span>barnefamilier i byen</span></div>
+      </div>
+      <p class="src">Kilde: SSB, 2025 og 2026</p>
+      <div class="price"><b>5 000 kr</b><span>per felt, én gang</span></div>
+    </div>
+
+    <form id="bizform" novalidate>
+      <h3>Meld interesse for et felt</h3>
+      <p class="hint">Vi tar kontakt så fort vi kan. Du betaler ingenting før vi har avtalt feltet.</p>
+      <label for="b-name">Bedrift<input id="b-name" name="bedrift" autocomplete="organization" required></label>
+      <div class="row">
+        <label for="b-contact">Kontaktperson<input id="b-contact" name="kontakt" autocomplete="name" required></label>
+        <label for="b-email">E-post<input id="b-email" name="epost" type="email" autocomplete="email" required></label>
+      </div>
+      <label for="b-field">Ønsket felt
+        <select id="b-field" name="felt">
+          <option value="">Ingen preferanse</option>
+<option value="felt-1">Felt 1</option>
+<option value="felt-3">Felt 2</option>
+<option value="felt-5">Felt 3</option>
+<option value="felt-6">Felt 4</option>
+<option value="felt-7">Felt 5</option>
+<option value="felt-9">Felt 6</option>
+<option value="felt-11">Felt 7</option>
+<option value="felt-12">Felt 8</option>
+<option value="felt-13">Felt 9</option>
+<option value="felt-14">Felt 10</option>
+<option value="felt-17">Felt 11</option>
+<option value="felt-18">Felt 12</option>
+<option value="felt-20">Felt 13</option>
+<option value="felt-21">Felt 14</option>
+<option value="felt-22">Felt 15</option>
+<option value="felt-25">Felt 16</option>
+<option value="felt-26">Felt 17</option>
+<option value="felt-28">Felt 18</option>
+<option value="felt-29">Felt 19</option>
+<option value="felt-31">Felt 20</option>
+        </select>
+      </label>
+      <label for="b-msg">Melding <span class="hint">(valgfritt)</span><textarea id="b-msg" name="melding" placeholder="Fortell kort hva dere driver med"></textarea></label>
+      <p class="err" id="b-err" hidden></p>
+      <button class="btn primary" type="submit">Send interesse</button>
+      <div class="done" id="b-done" hidden><b>Takk, vi har fått det!</b><span id="b-done-text"></span></div>
+    </form>
+  </div>
+</section>
+
+<section id="kjop">
+  <div class="wrap buy">
+    <div class="intro">
+      <p class="eyebrow">Kjøp spillet</p>
+      <h2>Den perfekte trøndergaven.</h2>
+      <div class="box">
+        <div class="boxart" aria-hidden="true"><b>TRONDHEIM<br>RUNDT</b><span>BRETTSPILL</span></div>
+        <p>For 2 til 6 spillere fra 8 år. Passer til familiemiddag, hyttetur og utflyttede trøndere som savner byen.</p>
+      </div>
+      <ul class="where">
+        <li><b>Nettbutikk</b><span>Her på siden, med henting eller frakt</span></li>
+        <li><b>Stand</b><span>På Torvet og i kjøpesentre i desember</span></li>
+        <li><b>Butikk</b><span>Hos bokhandlere og bedriftene på brettet</span></li>
+      </ul>
+    </div>
+
+    <form id="buyform" novalidate>
+      <h3>Forhåndsbestill</h3>
+      <p class="hint">Du betaler når spillet er klart. Vi sender en e-post før det skjer.</p>
+      <div class="row">
+        <label for="o-name">Navn<input id="o-name" name="navn" autocomplete="name" required></label>
+        <label for="o-email">E-post<input id="o-email" name="epost" type="email" autocomplete="email" required></label>
+      </div>
+      <label for="o-qty">Antall spill
+        <span class="qty"><button type="button" id="minus" aria-label="Ett færre">−</button><input id="o-qty" name="antall" type="number" min="1" max="20" value="1" inputmode="numeric"><button type="button" id="plus" aria-label="Ett til">+</button><span class="sum" id="sum">399 kr</span></span>
+      </label>
+      <label for="o-pick">Levering
+        <select id="o-pick" name="levering">
+          <option>Henter på stand i Trondheim</option>
+          <option>Sendes i posten (+ frakt)</option>
+        </select>
+      </label>
+      <p class="err" id="o-err" hidden></p>
+      <button class="btn primary" type="submit">Forhåndsbestill</button>
+      <div class="done" id="o-done" hidden><b>Bestillingen er notert!</b><span id="o-done-text"></span></div>
+    </form>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:24px">
+    <p class="eyebrow">Spørsmål</p>
+    <h2>Lurer du på noe?</h2>
+    <div class="faq">
+      <details><summary>Når kommer spillet?</summary><p>Vi trykker spillet når feltene på brettet er solgt. Bedriftene betaler før vi trykker, så produksjonen er betalt før første spill selges.</p></details>
+      <details><summary>Hvilke bedrifter er med?</summary><p>Ingen ennå. Brettet på denne siden er en prototype, og alle feltene er ledige. Bedriftene som kjøper felt kommer på siden Våre partnere.</p></details>
+      <details><summary>Hva er et premiumfelt?</summary><p>Premiumfeltene er de dyreste feltene på brettet, de mørkeblå. Der lander spillerne sjeldnere, men det er dem alle vil eie.</p></details>
+      <details><summary>Kommer det nye utgaver?</summary><p>Planen er en ny utgave hvert år. Da kan nye bedrifter komme med, og de som er med kan beholde feltet sitt.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span class="logo">Trondheim <span style="color:var(--red)">Rundt</span></span>
+  <span>Laget i Trondheim. Dette er en prototype, og skjemaene sender ingenting ennå.</span>
+</footer>
+<script>
+(function(){
+  var sel0 = document.getElementById('b-field');
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[data-pick]'); if(!a) return;
+    sel0.value = a.dataset.pick;
+    setTimeout(function(){ document.getElementById('b-name').focus({preventScroll:true}); }, 400);
+  });
+  try {
+    var pick = new URLSearchParams(location.search).get('felt');
+    if (pick && /^felt-\d+$/.test(pick) && sel0.querySelector('option[value="' + pick + '"]')) sel0.value = pick;
+  } catch (err) {}
+  var info = document.getElementById('info');
+  var sel = document.getElementById('b-field');
+  var active = null;
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  document.querySelectorAll('.field').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(active) active.classList.remove('active');
+      active = btn; btn.classList.add('active');
+      var cat = btn.dataset.cat, name = btn.dataset.name;
+      if(btn.dataset.status === 'solgt'){
+        info.innerHTML = '<span class="k">' + esc(cat) + ' · solgt</span><strong>' + esc(name) + '</strong>Eier dette feltet på brettet.';
+      } else {
+        info.innerHTML = '<span class="k">' + esc(cat) + ' · ledig</span><strong>Dette feltet er ledig</strong>Pris i spillet: ' + esc(btn.dataset.price) + '<br>Leie: ' + esc(btn.dataset.rent) + '<br>' + '<a href="#bedrifter" data-pick="' + btn.id + '">Meld interesse for feltet</a>';
+      }
+    });
+  });
+
+
+  function check(form, errEl){
+    var bad = Array.prototype.find.call(form.querySelectorAll('[required]'), function(el){ return !el.value.trim() || (el.type==='email' && !/^\S+@\S+\.\S+$/.test(el.value)); });
+    if(bad){
+      errEl.textContent = bad.type==='email' ? 'Skriv inn en gyldig e-postadresse, for eksempel navn@bedrift.no.' : 'Fyll inn ' + bad.closest('label').firstChild.textContent.trim().toLowerCase() + ' før du sender.';
+      errEl.hidden = false; bad.focus(); return false;
+    }
+    errEl.hidden = true; return true;
+  }
+
+  document.getElementById('bizform').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!check(this, document.getElementById('b-err'))) return;
+    var f = sel.options[sel.selectedIndex];
+    document.getElementById('b-done-text').textContent = (sel.value ? 'Vi holder av ' + f.textContent.toLowerCase() + ' for ' : 'Vi tar kontakt med ') + document.getElementById('b-name').value.trim() + '. (Prototype: ingenting er sendt ennå.)';
+    document.getElementById('b-done').hidden = false;
+  });
+
+  var qty = document.getElementById('o-qty'), sum = document.getElementById('sum');
+  function upd(){ var n = Math.max(1, Math.min(20, parseInt(qty.value,10)||1)); qty.value = n; sum.textContent = (n*399).toLocaleString('nb-NO') + ' kr'; }
+  document.getElementById('minus').addEventListener('click', function(){ qty.value = (parseInt(qty.value,10)||1) - 1; upd(); });
+  document.getElementById('plus').addEventListener('click', function(){ qty.value = (parseInt(qty.value,10)||1) + 1; upd(); });
+  qty.addEventListener('change', upd);
+
+  document.getElementById('buyform').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!check(this, document.getElementById('o-err'))) return;
+    upd();
+    document.getElementById('o-done-text').textContent = qty.value + ' spill til ' + document.getElementById('o-name').value.trim() + ', totalt ' + sum.textContent + '. (Prototype: ingenting er sendt ennå.)';
+    document.getElementById('o-done').hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
