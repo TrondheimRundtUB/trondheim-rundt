@@ -263,6 +263,9 @@ form.steps{display:flex;flex-direction:column;gap:18px;min-width:0;background:no
 .summary .btn{width:100%;margin-top:6px}
 .summary .note{font-size:13px;opacity:.8}
 .empty{color:var(--muted)}
+.remember{display:flex;flex-direction:column;gap:6px}
+.check{flex-direction:row;align-items:flex-start;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
+.check input{width:20px;height:20px;min-height:0;margin-top:1px;flex-shrink:0;accent-color:var(--red)}
 .vippsbox{background:var(--paper);color:var(--ink);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
 .vippsbox .ln{border-bottom:1px solid var(--line);padding-bottom:6px}
 .vippsbox .ln span:last-child{font-weight:700}
@@ -381,6 +384,10 @@ form,.rule,.step,.tcard,.buycta,details,.slot,.pcard{border-width:1.5px;box-shad
           <label for="k-phone">Mobil<input id="k-phone" type="tel" autocomplete="tel" inputmode="tel" required></label>
         </div>
         <label for="k-email">E-post<input id="k-email" type="email" autocomplete="email" required></label>
+        <div class="remember">
+          <label class="check" for="k-remember"><input type="checkbox" id="k-remember"> Husk navn, mobil og e-post på denne enheten til neste gang</label>
+          <button type="button" class="linkbtn" id="k-forget" hidden>Glem opplysningene mine</button>
+        </div>
         <div id="addr" hidden>
           <label for="k-street">Adresse<input id="k-street" autocomplete="street-address"></label>
           <div class="row" style="margin-top:14px">
@@ -487,8 +494,31 @@ form,.rule,.step,.tcard,.buycta,details,.slot,.pcard{border-width:1.5px;box-shad
     $('v-sum').textContent = $('s-tot').textContent;
     $('v-ref').textContent = ref;
     $('v-box').hidden = false;
+    remember();
   });
-  load(); render();
+  /* Husk kunden: lagres bare i nettleseren til kunden, og bare hvis de krysser av selv. */
+  var KEY = 'tr-kunde';
+  function remember(){
+    try {
+      if ($('k-remember').checked) {
+        localStorage.setItem(KEY, JSON.stringify({ navn: $('k-name').value.trim(), mobil: $('k-phone').value.trim(), epost: $('k-email').value.trim() }));
+        $('k-forget').hidden = false;
+      } else { localStorage.removeItem(KEY); $('k-forget').hidden = true; }
+    } catch (e) {}
+  }
+  function recall(){
+    try {
+      var d = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (d) { $('k-name').value = d.navn || ''; $('k-phone').value = d.mobil || ''; $('k-email').value = d.epost || ''; $('k-remember').checked = true; $('k-forget').hidden = false; }
+    } catch (e) {}
+  }
+  $('k-forget').addEventListener('click', function(){
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    $('k-name').value = ''; $('k-phone').value = ''; $('k-email').value = '';
+    $('k-remember').checked = false; $('k-forget').hidden = true;
+  });
+  $('k-remember').addEventListener('change', function(){ if (!this.checked) { try { localStorage.removeItem(KEY); } catch (e) {} $('k-forget').hidden = true; } });
+  load(); recall(); render();
 })();
 </script>
 </main>
